@@ -7,12 +7,12 @@ tmpoutfile=/app/$(date "+%Y.%m.%d-%H.%M.%S").out
 
 # Check if today is a working day
 if [[ $(date +%u) -lt 6 ]] ; then
-  shuf /app/urllist.txt | head -1000 > $tmpfile
+  shuf /app/urllist.txt | head -$TG_URLS > $tmpfile
 fi
 
 # Check if today is a day in the weekend
 if [[ $(date +%u) -gt 5 ]] ; then
-  shuf /app/urllist.txt | head -$(($TG_WEEKEND*10)) > $tmpfile
+  shuf /app/urllist.txt | head -$((($TG_WEEKEND*$TG_URLS)/100)) > $tmpfile
 fi
 
 # Loop through the urls in the file and visit them 

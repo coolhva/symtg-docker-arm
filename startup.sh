@@ -17,6 +17,12 @@ if [ -z "$TG_PROXY" ]; then
   export TG_PROXY="http://proxy.threatpulse.com:8080"
 fi
 
+# Check if the URL quantity variable is set, if not set the default
+if [ -z "$TG_URLS" ]; then
+  echo "URL quantity (TG_URLS) not set, using default of 1000"
+  export TG_URLS="1000"
+fi
+
 # Check if the interval variable is set, if not set the default
 if [ -z "$TG_INTERVAL" ]; then
   echo "Interval (TG_INTERVAL) not set, using default of 10 minutes"
@@ -49,7 +55,7 @@ fi
 /app/update.sh
 
 # load the amount of URLS
-TG_URLS=$(cat /app/urllist.txt | wc -l)
+TG_URLSLOADED=$(cat /app/urllist.txt | wc -l)
 
 # Add the wss script with the interval in the crontab file
 echo '*/'"$TG_INTERVAL"' * * * * . /app/env.sh; /app/wss.sh' > /etc/cron.d/app
@@ -68,11 +74,12 @@ chmod +x /app/env.sh
 # Show settings
 echo ''
 echo 'Settings        : '
-echo 'Version         : 1.1 arm'
+echo 'Version         : 1.2 arm'
 echo 'Proxy           : '"$TG_PROXY"
 echo 'Interval (min)  : '"$TG_INTERVAL"
 echo 'Weekend         : '"$TG_WEEKEND"'%'
-echo 'URLS            : '"$TG_URLS"
+echo 'URLS quantity   : '"$TG_URLS"
+echo 'URLS loaded     : '"$TG_URLSLOADED"
 echo 'External IP     : '"$TG_IP"
 echo ''
 echo Starting crond...
